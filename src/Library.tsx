@@ -1,12 +1,12 @@
 import { useState } from "preact/hooks";
-import { IconButton } from "./IconButton";
-import { Reader } from "./Reader";
+import { IconButton } from "./Common/IconButton";
+import { ChapterReader } from "./Reader/Reader";
 
 export function Library() {
     let [openReader, setOpenReader] = useState(false);
 
     if (openReader) {
-        return Reader()
+        return ChapterReader()
     }
     else {
         return <div>

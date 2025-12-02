@@ -1,0 +1,25 @@
+.TopBar {
+    height: 3rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.Back.Button {
+    position: absolute;
+    left: 0.5rem;
+}
+
+.ChapterSelect {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ChapterText {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin: 0rem;
+}

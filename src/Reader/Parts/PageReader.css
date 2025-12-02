@@ -1,0 +1,19 @@
+.PageReader {
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+
+.Page {
+    width: 100%;
+    background-color: red;
+}
+
+.SideBar {
+    width: 20%;
+    height: 100%;
+    position: absolute;
+    background-color: blue;
+}
+

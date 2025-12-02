@@ -1,9 +1,11 @@
-import { IconButton } from "./IconButton";
+import "./SideBar.css";
+
+import { IconButton } from "../../Common/IconButton";
 
 export function SideBar() {
-    return <div>
+    return <div class="SideBar">
         <h1>SideBar</h1>
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div>
             <IconButton icon="arrow_back" />
             <IconButton icon="arrow_forward" />
         </div>
