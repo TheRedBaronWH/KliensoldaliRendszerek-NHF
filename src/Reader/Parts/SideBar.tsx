@@ -1,12 +1,11 @@
+import { IconButton } from "../../Common/IconButton";
 import "./SideBar.css";
 
-import { IconButton } from "../../Common/IconButton";
-
 export function SideBar() {
-    return <div class="SideBar">
-        <h1>SideBar</h1>
-        <div>
+    return <div>
+        <div class="SideBar-TopBar">
             <IconButton icon="arrow_back" />
+            <h1>Page 1</h1>
             <IconButton icon="arrow_forward" />
         </div>
     </div>

@@ -6,6 +6,9 @@
 }
 
 .Page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     background-color: red;
 }
@@ -14,6 +17,12 @@
     width: 20%;
     height: 100%;
     position: absolute;
+    right: 0;
     background-color: blue;
 }
 
+h1 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin: 0rem;
+}
