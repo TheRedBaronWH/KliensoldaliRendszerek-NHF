@@ -1,4 +1,4 @@
-.PageReader {
+.PageReader{
     width: 100vw;
     display: flex;
     flex-direction: row;
@@ -11,18 +11,4 @@
     justify-content: center;
     width: 100%;
     background-color: red;
-}
-
-.SideBar {
-    width: 20%;
-    height: 100%;
-    position: absolute;
-    right: 0;
-    background-color: blue;
-}
-
-h1 {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    margin: 0rem;
 }

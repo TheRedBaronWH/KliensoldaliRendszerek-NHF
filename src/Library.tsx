@@ -5,15 +5,17 @@ import { IconButton } from "./Common/IconButton";
 import { ChapterReader } from "./Reader/Reader";
 
 let MANGA_STORAGE_KEY = "manga-library";
-//let mangas = loadMangas();
-let mangas = [1,2,3];
+let mangas = ["1", "2", "3"];
 
 export function Library() {
     let [openReader, setOpenReader] = useState(false);
-    let [selectedManga, setSelectedManga] = useState(0);
+    let [selectedManga, setSelectedManga] = useState("");
 
     if (openReader) {
-        return <ChapterReader selectedManga={selectedManga} />
+        return <ChapterReader
+            selectedManga={selectedManga}
+            onBackClicked={() => setOpenReader(false)}
+        ></ChapterReader>
     }
     else {
         let mangaDivs = mangas.map((manga: any) => {
@@ -26,12 +28,7 @@ export function Library() {
         });
         return <div class="Library">
             <h1>Library</h1>
-            <IconButton icon="📚" onClick={
-                () => {
-                    setOpenReader(true)
-                    setSelectedManga(1);
-                }
-            } />
+
             {mangaDivs}
         </div>
     }

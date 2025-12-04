@@ -6,7 +6,7 @@
     position: relative;
 }
 
-.Back.Button {
+.BackButton {
     position: absolute;
     left: 0.5rem;
 }
