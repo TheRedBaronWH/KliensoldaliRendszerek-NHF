@@ -3,10 +3,11 @@ import "./Reader.css";
 import { TopBar } from "./Parts/TopBar";
 import { PageReader } from "./Parts/PageReader";
 import { useState } from "preact/hooks";
+import { Manga, SavedManga } from "../Model/Model";
 
 export function ChapterReader(
     { selectedManga, onBackClicked }: 
-    { selectedManga: string, onBackClicked?: () => void }
+    { selectedManga: SavedManga, onBackClicked?: () => void }
 ) {
     let manga = loadManga(selectedManga);
     let [actualVolume, setActualVolume] = useState(1);
@@ -39,6 +40,7 @@ export function ChapterReader(
     </div>
 }
 
-function loadManga(selectedManga: string) {
-    return selectedManga;
+function loadManga(selectedManga: SavedManga) /*: Manga */ {
+    //call to Api to load manga data
+    return selectedManga.mangaTitle;
 }
