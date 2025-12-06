@@ -1,0 +1,13 @@
+.PageReader{
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    justify-content: center;
+}
+
+.Page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,19 @@
+.TitledPictureButton {
+    max-width: 240px;
+    max-height: 360px;
+}
+
+.TitledPictureButton button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.MangaCover {
+    width: 100%;
+    height: auto;
+    max-height: 80%;
+    object-fit: contain;
+    border-radius: 4px;
+}

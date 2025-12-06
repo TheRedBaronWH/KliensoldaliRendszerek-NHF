@@ -1,0 +1,21 @@
+.TopBar {
+    height: 3rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    background-color: rgb(40, 40, 40);
+}
+
+.BackButton {
+    position: absolute;
+    left: 0.5rem;
+}
+
+.ChapterSelect {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

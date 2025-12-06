@@ -1,0 +1,10 @@
+.TitledButton {
+    max-width: 240px;
+    max-height: 360px;
+}
+
+.TitledButton button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

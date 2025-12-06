@@ -1,7 +1,7 @@
 import { render } from 'preact';
 
 import './index.css';
-import { Library } from './Library';
+import { Library } from './Frontend/Library';
 
 export function App() {
 	return Library();

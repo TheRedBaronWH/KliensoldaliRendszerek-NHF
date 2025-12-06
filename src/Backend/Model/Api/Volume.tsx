@@ -1,0 +1,51 @@
+//api.mangadex.dev/manga/id/aggregate
+
+export interface VolumeResponse {
+    volumes: Volume[];
+}
+
+export interface Volume {
+    volume: string,
+    count: number,
+    chapters: VolumeChapter[];
+}
+
+export interface VolumeChapter {
+    chapter: string
+    id: string
+    isUnavailable: boolean
+    others: string[]
+    count: number
+}
+
+// Raw API response interfaces and conversion functions
+
+export interface RawVolumesResponse{
+    volumes: Record<string, RawVolume>;
+}
+
+export function RawVolumesResponseToVolumesResponse(rawResponse: RawVolumesResponse): VolumeResponse {
+    let volumesArray: Volume[] = [];
+    for (let volumeKey in rawResponse.volumes) {
+        volumesArray.push(RawVolumetoVolume(rawResponse.volumes[volumeKey]));
+    }
+    return { volumes: volumesArray };
+}
+
+export interface RawVolume {
+    volume: string,
+    count: number,
+    chapters: Record<string, VolumeChapter>;
+}
+
+function RawVolumetoVolume(rawVolume: RawVolume): Volume {
+    let chaptersArray: VolumeChapter[] = [];
+    for (let chapterKey in rawVolume.chapters) {
+        chaptersArray.push(rawVolume.chapters[chapterKey]);
+    }
+    return {
+        volume: rawVolume.volume,
+        count: rawVolume.count,
+        chapters: chaptersArray
+    };
+}

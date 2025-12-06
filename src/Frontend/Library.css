@@ -1,0 +1,22 @@
+.Library {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    /* padding-left: 1rem;
+    padding-right: 1rem; */
+    margin: 0rem;
+}
+
+.MangaGrid {
+    width: 80%;
+    max-width: 80vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    box-sizing: border-box;
+    align-items: center;
+}
