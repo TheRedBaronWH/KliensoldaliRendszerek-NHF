@@ -1,4 +1,5 @@
-import { ChapterPages, ChapterPagesResponse, ChapterResponse } from "../Model/Api/Chapter";
+import { isApiLogging } from "../..";
+import { ChapterPagesResponse, ChapterResponse } from "../Model/Api/Chapter";
 import { ChapterModel } from "../Model/Model";
 import { toChapter } from "../Model/Transformers";
 
@@ -17,19 +18,20 @@ export async function loadChapter(Id: string): Promise<ChapterModel | null> {
     try {
         const response = await fetch(url + Id);
         if (!response.ok) {
-            console.error("Failed to fetch chapter:", response.statusText);
+            console.error(`Failed to fetch chapter: ${response.statusText}`);
             return null;
         }
-        //console.log(url + Id);
+
+        if(isApiLogging()) console.log(url + Id);
+
         const data = await response.json() as ChapterResponse;
         return toChapter(data.data);
         
     } 
     catch (error) {
-        console.error("Error loading chapter:", error);
+        console.error(`Error loading chapter: ${error}`);
+        return null;
     }
-
-    return null;
 }
 
 /** 
@@ -47,16 +49,17 @@ export async function loadPages(Id: string): Promise<ChapterPagesResponse | null
     try {
         const response = await fetch(url + Id);
         if (!response.ok) {
-            console.error("Failed to fetch chapter pages:", response.statusText);
+            console.error(`Failed to fetch chapter pages: ${response.statusText}`);
             return null;
         }
-        //console.log(url + Id);
+
+        if(isApiLogging()) console.log(url + Id);
+
         const chapter = await response.json() as ChapterPagesResponse;
         return chapter;
     }
     catch (error) {
-        console.error("Error loading chapter pages:", error);
+        console.error(`Error loading chapter pages: ${error}`);
+        return null;
     }
-
-    return null;
 }

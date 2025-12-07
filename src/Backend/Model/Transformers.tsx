@@ -81,6 +81,7 @@ export async function toChapter(data: Chapter): Promise<ChapterModel> {
     let id = data.id;
     let title = data.attributes.title;
     let chapterNumber = data.attributes.chapter;
+    let externalUrl = data.attributes.externalUrl || null;
     
     let chapterPagesResponse = await loadPages(id);
     let baseUrl = chapterPagesResponse.baseUrl || "";

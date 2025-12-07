@@ -25,7 +25,8 @@ export class ChapterModel {
         readonly baseUrl: string,
         readonly hash: string,
         readonly pageIds: string[], //ChapterPages
-        readonly dataSaverPageIds: string[] //ChapterPages
+        readonly dataSaverPageIds: string[], //ChapterPages
+        readonly externalUrl?: string //Chapter.attributes.externalUrl
     ) { }
 }
 

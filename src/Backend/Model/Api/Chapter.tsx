@@ -14,7 +14,8 @@ export interface ChapterAttributes {
     volume: string,
     chapter: string,
     title: string,
-    pages: number
+    pages: number,
+    externalUrl: string | null,
 }
 
 export interface Relationship {

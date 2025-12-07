@@ -1,3 +1,4 @@
+import { isApiLogging } from "../..";
 import { CoverResponse, MangaResponse } from "../Model/Api/Manga";
 import { RawVolumesResponse, RawVolumesResponseToVolumesResponse, Volume, VolumeResponse } from "../Model/Api/Volume";
 import { MangaModel} from "../Model/Model";
@@ -20,15 +21,17 @@ export async function loadManga(Id: string): Promise<MangaModel | null> {
     try {
         let response = await fetch(url + Id);
         if (!response.ok) {
-            console.error("Failed to fetch manga:", response.statusText);
+            console.error(`Failed to fetch manga: ${response.statusText}`);
             return null;
         }
-        //console.log(url + Id);
+
+        if(isApiLogging()) console.log(url + Id);
+
         let data = await response.json() as MangaResponse;
         return toManga(data.data);
     }
     catch (error) {
-        console.error("Error loading manga:", error);
+        console.error(`Error loading manga: ${error}`);
         return null;
     }
 }
@@ -51,16 +54,18 @@ export async function loadMangaContent(Id: string): Promise<Volume[] | null> {
     try {
         let response = await fetch(url + Id + aggregate);
         if (!response.ok) {
-            console.error("Failed to fetch manga content:", response.statusText);
+            console.log(`Failed to fetch manga content: ${response.statusText}`);
             return null;
         }
-        //console.log(url + Id + aggregate);
+
+        if(isApiLogging()) console.log(url + Id + aggregate);
+
         let data = await response.json() as RawVolumesResponse;
         let fixedData = RawVolumesResponseToVolumesResponse(data);
         return fixedData.volumes;
     }
     catch (error) {
-        console.error("Error loading manga content:", error);
+        console.error(`Error loading manga content: ${error}`);
         return null;
     }
 }
@@ -76,23 +81,25 @@ export async function loadMangaContent(Id: string): Promise<Volume[] | null> {
  * @see {@link https://api.mangadex.dev/docs/redoc.html} for API documentation
  **/
 export async function loadMangaCover(mangaId: string, coverId: string): Promise<string | null> {
-    const url = "https://api.mangadex.dev/cover"
+    const url = "https://api.mangadex.dev/cover/"
     const coverUrl = "https://uploads.mangadex.org/covers/";
 
     try {
-        let coverResponse = await fetch(url + "/" + coverId);
+        let coverResponse = await fetch(url + coverId);
         if (!coverResponse.ok) {
-            console.error("Failed to fetch manga cover:", coverResponse.statusText);
+            console.error(`Failed to fetch manga cover: ${coverResponse.statusText}`);
             return null;
         }
-        //console.log(url + "/" + coverId);
+
+        if(isApiLogging()) console.log(url + coverId);
+
         let coverData = await coverResponse.json() as CoverResponse;
         let fileName = coverData.data.attributes.fileName;
 
         return coverUrl + mangaId + "/" + fileName;
     }
     catch (error) {
-        console.error("Error loading manga cover:", error);
+        console.error(`Error loading manga cover: ${error}`);
         return null;
     }
 }

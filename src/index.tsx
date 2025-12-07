@@ -3,6 +3,22 @@ import { render } from 'preact';
 import './index.css';
 import { Library } from './Frontend/Library';
 
+const apiLogging = true;
+export function isApiLogging() {
+    return apiLogging;
+}
+
+const readerLogging = false;
+export function isReaderLogging() {
+    return readerLogging;
+}
+
+const dataSaver = true;
+export function isDataSaver() {
+    return dataSaver;
+}
+
+
 export function App() {
 	return Library();
 }
