@@ -1,5 +1,9 @@
 //api.mangadex.dev/manga/id
 
+export interface MangaSearchResponse {
+    data: Manga[];
+}
+
 export interface MangaResponse {
     data: Manga;
 }

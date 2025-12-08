@@ -3,18 +3,23 @@ import "./Library.css"
 import { useState } from "preact/hooks";
 import { ChapterReader } from "./Reader/Reader";
 import { MangaModel, SavedManga } from "../Backend/Model/Model";
-import { TitledPictureButton } from "./Common/TitledPictureButton";
-import { loadManga, loadMangaCover } from "../Backend/Api/MangaLoader";
+import { MangaEntry } from "./Common/MangaEntry";
+import { loadManga, loadMangaCover, searchForManga } from "../Backend/Api/MangaLoader";
 import { TextInputAndButton } from "./Common/TextInputAndButton";
 
 let MANGA_STORAGE_KEY = "manga-library";
 let mangas: SavedManga[] = loadMangas();
 
 export function Library() {
+    let [state, setState] = useState(0);
+
+    let [message, setMessage] = useState("");
+    let [showMessage, setShowMessage] = useState(false);
+
     let [openReader, setOpenReader] = useState(false);
     let [selectedManga, setSelectedManga] = useState<MangaModel | null>(null);
 
-    let [newMangaId, setNewMangaId] = useState("");
+    let [newMangaTitle, setNewMangaTitle] = useState("");
 
     async function openReaderFor(id: string) {
         try {
@@ -22,6 +27,13 @@ export function Library() {
             if (manga) {
                 updateManga(manga);
                 setSelectedManga(manga);
+                if (!manga.volumes) {
+                    console.error("Volumes failed to load");
+                    setMessage(`Failed to load volumes for: ${manga.title}`);
+                    setShowMessage(true);
+                    return;
+                }
+                setShowMessage(false);
                 setOpenReader(true);
             }
         } catch (error) {
@@ -38,9 +50,13 @@ export function Library() {
     else {
         let mangaDivs = mangas.map((manga: any) => {
             if (manga.mangaCover) {
-                return <TitledPictureButton title={manga.mangaTitle} picture={manga.mangaCover} onClick={
-                    () => openReaderFor(manga.mangaId)} >
-                </TitledPictureButton>
+                return <MangaEntry title={manga.mangaTitle} picture={manga.mangaCover}
+                    onClick={() => openReaderFor(manga.mangaId)}
+                    onDeleteClick={() => {
+                        deleteManga(manga.mangaId)
+                        setState(0)
+                    }}>
+                </MangaEntry>
             }
             else {
                 return <button onClick={
@@ -49,17 +65,31 @@ export function Library() {
                 </button>
             }
         });
+        let messageBox = showMessage ? <div class="MessageBox">
+            <span>{message}</span>
+            <button onClick={() => setShowMessage(false)}>
+                OK
+            </button>
+        </div> : null;
         return <div class="Library">
             <h1>Library</h1>
             <TextInputAndButton
-                value={newMangaId}
-                onChange={setNewMangaId}
-                onClick={() => {
-                    addManga({ mangaId: newMangaId, mangaTitle: "Loading...", mangaCover: null });
+                value={newMangaTitle}
+                onChange={setNewMangaTitle}
+                onClick={async () => {
+                    let manga = await searchForManga(newMangaTitle);
+                    setState(0)
+                    if (addManga(manga)) {
+                        setMessage(`Manga added: ${manga.mangaTitle}`);
+                    } else {
+                        setMessage('Failed to add manga.');
+                    }
+                    setShowMessage(true);
                 }}
-                placeholder="Add a manga by Id"
+                placeholder="Add a manga by name"
                 buttonIcon="add"
             />
+            {messageBox}
             <div class="MangaGrid">
                 {mangaDivs}
             </div>
@@ -88,14 +118,27 @@ function updateManga(manga: MangaModel) {
     saveMangas();
 }
 
-function addManga(manga: SavedManga) {
-    for(let m of mangas) {
-        if(m.mangaId === manga.mangaId) {
-            console.log("Manga already in library");
-            return;
+function addManga(manga: SavedManga): boolean {
+    if (!manga) {
+        console.error("Manga is null");
+        return false;
+    }
+
+    for (let m of mangas) {
+        console.log(m.mangaId, manga.mangaId);
+        if (m.mangaId === manga.mangaId) {
+            m = manga;
+            saveMangas();
+            return true;
         }
     }
     mangas.push(manga);
+    saveMangas();
+    return true;
+}
+
+function deleteManga(mangaId: string) {
+    mangas = mangas.filter(m => m.mangaId !== mangaId);
     saveMangas();
 }
 

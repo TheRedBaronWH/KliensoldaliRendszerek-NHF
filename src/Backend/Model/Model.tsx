@@ -33,7 +33,7 @@ export class ChapterModel {
 export class SavedManga {
     constructor(
         readonly mangaId: string,
-        readonly mangaCover: any, 
+        readonly mangaCover: string, 
         readonly mangaTitle: string,
     ) { }
 }

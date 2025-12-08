@@ -22,3 +22,11 @@ export function TopBar(
         </div>
     </div>
 }
+
+export function LoadingTopBar({onBackClicked}: {onBackClicked: () => void}) {
+    return <div class="TopBar">
+        <div class="BackButton">
+            <IconButton icon="arrow_back" content="Go Back" onClick={onBackClicked} />
+        </div>
+    </div>
+}

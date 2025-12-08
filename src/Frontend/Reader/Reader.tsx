@@ -1,10 +1,11 @@
 import "./Reader.css";
 
-import { TopBar } from "./Parts/TopBar";
+import { LoadingTopBar, TopBar } from "./Parts/TopBar";
 import { PageReader } from "./Parts/PageReader";
 import { useState } from "preact/hooks";
 import { ChapterModel, MangaModel } from "../../Backend/Model/Model";
 import { loadChapter } from "../../Backend/Api/ChapterLoader";
+import { isDataSaver, isReaderLogging } from "../..";
 
 export function ChapterReader(
     { selectedManga, onBackClicked }:
@@ -12,9 +13,12 @@ export function ChapterReader(
 ) {
     let [actualVolume, setActualVolume] = useState(0);
     const setVolume = (v: number) => {
-        console.log("setVolume", actualVolume, v, selectedManga.volumes.length);
+        if (isReaderLogging()) console.log(`Trying to set volume from ${actualVolume} to ${v}; max ${selectedManga.volumes.length}`);
         if (v < 0) return;
         if (v >= selectedManga.volumes.length) return;
+
+        setActualChapter(null);
+
         setActualVolume(v);
         setChapter(0);
         setPage(0);
@@ -26,7 +30,8 @@ export function ChapterReader(
     let [actualChapterNumber, setActualChapterNumber] = useState(0);
     let [actualChapter, setActualChapter] = useState<ChapterModel | null>(null);
     const setChapter = async (c: number) => {
-        console.log("setChapter", actualChapterNumber, c, getVolume().chapterIds.length);
+        if (isReaderLogging()) console.log(`Trying to set chapter from ${actualChapterNumber} to ${c}; max ${getVolume().chapterIds.length}`);
+
         if (c < 0) {
             setVolume(actualVolume - 1);
             return;
@@ -35,13 +40,14 @@ export function ChapterReader(
             setVolume(actualVolume + 1);
             return;
         }
+
         setActualChapterNumber(c);
-        setActualChapter(await getActualChapter());
+        setActualChapter(await getActualChapter(c));
         setPage(0);
     }
-    async function getActualChapter() {
+    async function getActualChapter(chapterNumber: number) {
         try {
-            const chapterId = getVolume().chapterIds[actualChapterNumber.valueOf()];
+            const chapterId = getVolume().chapterIds[chapterNumber];
             const chapter = await loadChapter(chapterId);
             if (chapter) {
                 return chapter;
@@ -53,7 +59,8 @@ export function ChapterReader(
 
     let [actualPageNumber, setActualPageNumber] = useState(0);
     const setPage = (p: number) => {
-        console.log("setPage", actualPageNumber, p, actualChapter?.pageIds.length);
+        if (isReaderLogging()) console.log(`Trying to set page from ${actualPageNumber} to ${p}; max ${actualChapter?.pageIds.length}`);
+
         if (p < 0) {
             setChapter(actualChapterNumber - 1);
             return;
@@ -62,11 +69,17 @@ export function ChapterReader(
             setChapter(actualChapterNumber + 1);
             return;
         }
+
         setActualPageNumber(p);
     }
     const getPageSource = () => {
         let src = actualChapter.baseUrl + "/data/" + actualChapter.hash + "/" + actualChapter.pageIds[actualPageNumber.valueOf()];
-        //console.log("Page src:", src);
+        if (isReaderLogging()) console.log(`Page src: ${src}`);
+        return src;
+    }
+    const getPageSourceDataSaver = () => {
+        let src = actualChapter.baseUrl + "/data-saver/" + actualChapter.hash + "/" + actualChapter.dataSaverPageIds[actualPageNumber.valueOf()];
+        if (isReaderLogging()) console.log(`Page src: ${src}`);
         return src;
     }
 
@@ -77,8 +90,8 @@ export function ChapterReader(
                 onNextVolume={() => setVolume(actualVolume + 1)}
                 onPreviousVolume={() => setVolume(actualVolume - 1)} />
             <PageReader
-                title={actualChapter.title} chapter={actualChapter.chapterNumber}
-                page={actualPageNumber + 1} pageSrc={getPageSource()}
+                chapter={actualChapter}
+                pageNumber={actualPageNumber + 1} pageSrc={isDataSaver() ? getPageSourceDataSaver() : getPageSource()}
                 onNextChapter={() => setChapter(actualChapterNumber + 1)}
                 onPreviousChapter={() => setChapter(actualChapterNumber - 1)}
                 onNextPage={() => setPage(actualPageNumber + 1)}
@@ -87,6 +100,11 @@ export function ChapterReader(
         </div>
     } else {
         setChapter(0);
-        return <div>Loading...</div>;
+        return <div class="ChapterReader">
+            <LoadingTopBar onBackClicked={onBackClicked} />
+            <div class = "LoadingMessage">
+                Loading...
+            </div>
+        </div>;
     }
 }

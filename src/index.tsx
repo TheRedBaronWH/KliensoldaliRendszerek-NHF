@@ -18,6 +18,10 @@ export function isDataSaver() {
     return dataSaver;
 }
 
+const tryWithOrgAsWell = true;
+export function isTryWithOrgAsWell() {
+    return tryWithOrgAsWell;
+}
 
 export function App() {
 	return Library();

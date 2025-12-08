@@ -1,5 +1,5 @@
 import { Manga } from "./Api/Manga";
-import { ChapterModel, MangaModel, VolumeModel } from "./Model";
+import { ChapterModel, MangaModel, SavedManga, VolumeModel } from "./Model";
 import { Volume } from "./Api/Volume";
 import { loadMangaContent, loadMangaCover } from "../Api/MangaLoader";
 import { Chapter } from "./Api/Chapter";
@@ -58,7 +58,9 @@ function findRelationship(data: Manga, type: string): string | null {
  * 
  * @returns a VolumeModel[] representing the transformed volume data
  **/
-function toVolumes(volumes: Volume[]): VolumeModel[] {
+function toVolumes(volumes: Volume[]): VolumeModel[] | null {
+    if(volumes.length === 0) return null;
+
     let volumeModels: VolumeModel[] = [];
     for (let volume of volumes) {
         let chapters = volume.chapters.map(chapter => {
@@ -96,7 +98,32 @@ export async function toChapter(data: Chapter): Promise<ChapterModel> {
         baseUrl,
         hash,
         pageIds,
-        dataSaverPageIds                
+        dataSaverPageIds,
+        externalUrl              
     }
+}
+
+/** 
+ * Since the API returns information in a slightly inconvienient format (at least for our purposes),
+ * we need to transform the raw data into our internal models.
+ * 
+ * @param data: Manga - Raw manga data from the API
+ * 
+ * @returns a SavedManga representing the transformed manga data, for storing
+ **/
+export async function toSavedManga(data: Manga[]): Promise<SavedManga | null> {
+    if(data.length === 0) return null;
+
+    let id = data[0].id;
+    let title = data[0].attributes.title.en;
+    let cover = await loadMangaCover(id, findRelationship(data[0], "cover_art")) || null;
+
+    console.log("toSavedManga:", id, title, cover);
+
+    return new SavedManga(
+        id,
+        cover,
+        title
+    );
 }
     

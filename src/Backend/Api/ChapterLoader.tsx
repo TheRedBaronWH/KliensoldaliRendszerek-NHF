@@ -1,4 +1,4 @@
-import { isApiLogging } from "../..";
+import { isApiLogging, isTryWithOrgAsWell } from "../..";
 import { ChapterPagesResponse, ChapterResponse } from "../Model/Api/Chapter";
 import { ChapterModel } from "../Model/Model";
 import { toChapter } from "../Model/Transformers";
@@ -14,22 +14,38 @@ import { toChapter } from "../Model/Transformers";
  **/
 export async function loadChapter(Id: string): Promise<ChapterModel | null> {
     const url = `https://api.mangadex.dev/chapter/`;
+    const orgUrl = `https://api.mangadex.org/chapter/`;
 
+    let chapter = await fetchChapter(url, Id);
+    if (chapter) {
+        return chapter;
+    }
+    else {
+        if (!isTryWithOrgAsWell()) {
+            return null;
+        }
+        console.log("Trying with .org endpoint");
+        let chapter = await fetchChapter(orgUrl, Id);
+        return chapter;
+    }
+}
+
+async function fetchChapter(url: string, Id: string): Promise<ChapterModel | null> {
     try {
         const response = await fetch(url + Id);
         if (!response.ok) {
-            console.error(`Failed to fetch chapter: ${response.statusText}`);
+            console.error(`Failed to fetch chapter (${Id}): ${response.statusText}`);
             return null;
         }
 
-        if(isApiLogging()) console.log(url + Id);
+        if (isApiLogging()) console.log(url + Id);
 
         const data = await response.json() as ChapterResponse;
         return toChapter(data.data);
-        
-    } 
+
+    }
     catch (error) {
-        console.error(`Error loading chapter: ${error}`);
+        console.error(`Error loading chapter (${Id}): ${error}`);
         return null;
     }
 }
@@ -45,21 +61,37 @@ export async function loadChapter(Id: string): Promise<ChapterModel | null> {
  **/
 export async function loadPages(Id: string): Promise<ChapterPagesResponse | null> {
     const url = 'https://api.mangadex.dev/at-home/server/';
+    const orgUrl = 'https://api.mangadex.org/at-home/server/';
 
-    try {
-        const response = await fetch(url + Id);
-        if (!response.ok) {
-            console.error(`Failed to fetch chapter pages: ${response.statusText}`);
+    let pages = await fetchPages(url, Id);
+    if (pages) {
+        return pages;
+    }
+    else {
+        if (!isTryWithOrgAsWell()) {
             return null;
         }
+        console.log("Trying with .org endpoint");
+        let pages = await fetchPages(orgUrl, Id);
+        return pages;
+    }
+}
 
-        if(isApiLogging()) console.log(url + Id);
+async function fetchPages(url: string, Id: string): Promise<ChapterPagesResponse | null> {
+    try {
+        if (isApiLogging()) console.log(url + Id);
+
+        const response = await fetch(url + Id);
+        if (!response.ok) {
+            console.error(`Failed to fetch chapter pages (${Id}): ${response.statusText}`);
+            return null;
+        }
 
         const chapter = await response.json() as ChapterPagesResponse;
         return chapter;
     }
     catch (error) {
-        console.error(`Error loading chapter pages: ${error}`);
+        console.error(`Error loading chapter pages (${Id}): ${error}`);
         return null;
     }
 }

@@ -15,3 +15,15 @@
     width: 100%;
     overflow: auto;
 }
+
+.ChapterReader .LoadingMessage {
+    flex: 1 1 auto;
+    width: 100%;
+    overflow: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 100px;
+}

@@ -1,22 +1,28 @@
+import { ChapterModel } from "../../../Backend/Model/Model";
 import "./PageReader.css";
 
 import { SideBar } from "./SideBar";
 
 export type ChapterControls = {
-    title: string, chapter: string, page: number, pageSrc: string,
+    chapter: ChapterModel, pageNumber: number, pageSrc: string,
     onNextChapter: () => void, onPreviousChapter: () => void,
     onNextPage: () => void, onPreviousPage: () => void
 }
 
 export function PageReader(
-    { title, chapter, page, pageSrc,
+    { chapter, pageNumber, pageSrc,
         onNextChapter, onPreviousChapter,
         onNextPage, onPreviousPage }: ChapterControls
 ) {
+    let page = chapter.pageIds.length == 0 ? (
+        <h1>No pages available for this chapter, go to {chapter.externalUrl}</h1>
+    ) : (
+        <img class="Page" src={pageSrc} alt={`Page ${pageNumber} of chapter ${chapter} titled ${chapter.title}`} />
+    );
     return <div class="PageReader">
-        <img class="Page"src={pageSrc} />
+        {page}
         <SideBar
-            title={title} chapter={chapter} page={page}
+            title={chapter.title} chapter={chapter.chapterNumber} page={pageNumber}
             onNextChapter={onNextChapter}
             onPreviousChapter={onPreviousChapter}
             onNextPage={onNextPage}
