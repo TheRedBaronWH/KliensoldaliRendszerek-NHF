@@ -12,11 +12,11 @@ export function IconButton(
 ) {
     return <div class="IconButton">
         <button type="button" onClick={onClick}>
-            {contentPosition === "right" && content}
+            {contentPosition === "left" && content}
             <span class="material-symbols-outlined">
                 {icon}
             </span>
-            {contentPosition === "left" && content}
+            {contentPosition === "right" && content}
         </button>
     </div>
 }

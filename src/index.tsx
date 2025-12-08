@@ -8,6 +8,7 @@ export function isApiLogging() {
     return apiLogging;
 }
 
+//For you sanity, this should stay false xD
 const readerLogging = false;
 export function isReaderLogging() {
     return readerLogging;

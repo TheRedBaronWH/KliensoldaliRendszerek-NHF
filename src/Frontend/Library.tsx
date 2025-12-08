@@ -11,8 +11,6 @@ let MANGA_STORAGE_KEY = "manga-library";
 let mangas: SavedManga[] = loadMangas();
 
 export function Library() {
-    let [state, setState] = useState(0);
-
     let [message, setMessage] = useState("");
     let [showMessage, setShowMessage] = useState(false);
 
@@ -36,6 +34,10 @@ export function Library() {
                 setShowMessage(false);
                 setOpenReader(true);
             }
+            else {
+                setMessage("Manga couldn't be loaded");
+                setShowMessage(true);
+            }
         } catch (error) {
             console.error("Failed to load manga:", error);
         }
@@ -53,8 +55,9 @@ export function Library() {
                 return <MangaEntry title={manga.mangaTitle} picture={manga.mangaCover}
                     onClick={() => openReaderFor(manga.mangaId)}
                     onDeleteClick={() => {
+                        setMessage(`Manga deleted: ${manga.mangaTitle}`);
                         deleteManga(manga.mangaId)
-                        setState(0)
+                        setShowMessage(true);
                     }}>
                 </MangaEntry>
             }
@@ -78,7 +81,6 @@ export function Library() {
                 onChange={setNewMangaTitle}
                 onClick={async () => {
                     let manga = await searchForManga(newMangaTitle);
-                    setState(0)
                     if (addManga(manga)) {
                         setMessage(`Manga added: ${manga.mangaTitle}`);
                     } else {

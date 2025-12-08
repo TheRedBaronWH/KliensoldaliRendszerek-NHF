@@ -1,13 +1,104 @@
-.PageReader{
+.PageReader {
     width: 100vw;
     display: flex;
     flex-direction: row;
     position: relative;
     justify-content: center;
+
+    @media (min-width: 1000px) {
+        &.WithSideBar {
+            .Page-ChapterControls,
+            .PageNum {
+                display: none;
+                overflow: hidden;
+            }
+        }
+
+        &.NoSideBar {
+            .SideBar {
+                display: none;
+                overflow: hidden;
+            }
+        }
+    }
+
+    @media (max-width: 1000px) {
+        &.WithSideBar {
+            .SideBar {
+                display: none;
+                overflow: hidden;
+            }
+        }
+
+        &.NoSideBar {
+            .SideBar {
+                display: none;
+                overflow: hidden;
+            }
+        }
+    }
+}
+
+.PageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 .Page {
+    height: 90vh;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.Page-ChapterControls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    gap: 0.5rem;
+}
+
+.Page-ChapterControls .ChapterText {
+    font-size: large;
+}
+
+.Page-Hitboxes {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 95%;
+    display: flex;
+    flex-direction: row;
+}
+
+.Page-Hitboxes .Hitbox-Left {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 50%;
+    height: 95%;
+}
+
+.Page-Hitboxes .Hitbox-Right {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 50%;
+    height: 95%;
+}
+
+.PageNum {
+    position: absolute;
+    bottom: 0.2rem;
+    right: 0.2rem;
+
+    font-size: large;
 }

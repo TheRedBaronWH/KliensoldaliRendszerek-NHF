@@ -1,0 +1,9 @@
+.PageSelector {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    padding-bottom: 0.5rem;
+}

@@ -13,9 +13,14 @@
     left: 0.5rem;
 }
 
-.ChapterSelect {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.SideBarButton {
+    position: absolute;
+    right: 0.5rem;
+}
+
+@media (max-width: 1000px) {
+    .SideBarButton {
+        display: none;
+        overflow: hidden;
+    }
 }

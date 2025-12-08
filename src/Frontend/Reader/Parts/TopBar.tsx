@@ -1,13 +1,20 @@
 import "./TopBar.css";
 
 import { IconButton } from "../../Common/IconButton";
+import { VolumeSelector } from "./VolumeSelector";
 
-export function TopBar(
-    { title, volume, onNextVolume, onPreviousVolume, onBackClicked }:
-        { title: string, volume: string, onNextVolume?: () => void, onPreviousVolume?: () => void, onBackClicked?: () => void }
+export type TopBarProps = {
+    title: string, volume: string,
+    onNextVolume?: () => void, onPreviousVolume?: () => void,
+    onBackClicked?: () => void,
+    isSideBarOpen: boolean,
+    onSideBarToggle?: () => void
+}
+
+export function TopBar({ title, volume, onNextVolume, onPreviousVolume, onBackClicked, isSideBarOpen, onSideBarToggle }: TopBarProps
 ) {
     let volumeString = volume;
-    if(volumeString === "none") {
+    if (volumeString === "none") {
         volumeString = "N/A";
     }
 
@@ -15,15 +22,17 @@ export function TopBar(
         <div class="BackButton">
             <IconButton icon="arrow_back" content="Go Back" onClick={onBackClicked} />
         </div>
-        <div class="ChapterSelect">
-            <IconButton icon="arrow_back" onClick={onPreviousVolume} />
-            <h1>{title}: Volume {volumeString}</h1>
-            <IconButton icon="arrow_forward" onClick={onNextVolume} />
+        <VolumeSelector title={title} volumeNum={volumeString} onNextVolume={onNextVolume} onPreviousVolume={onPreviousVolume} />
+        <div class="SideBarButton">
+            <IconButton icon={isSideBarOpen ? "arrow_forward" : "arrow_back"}
+                content={isSideBarOpen ? "Hide SideBar" : "Show SideBar"}
+                contentPosition={isSideBarOpen ? "left" : "right"}
+                onClick={onSideBarToggle} />
         </div>
     </div>
 }
 
-export function LoadingTopBar({onBackClicked}: {onBackClicked: () => void}) {
+export function LoadingTopBar({ onBackClicked }: { onBackClicked: () => void }) {
     return <div class="TopBar">
         <div class="BackButton">
             <IconButton icon="arrow_back" content="Go Back" onClick={onBackClicked} />

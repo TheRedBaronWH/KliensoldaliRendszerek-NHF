@@ -1,0 +1,20 @@
+.ChapterSelector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    padding-top: 0.5rem;
+}
+
+.ChapterSelector .ChapterControls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    padding-top: 0.5rem;
+    gap: .5rem;
+}
