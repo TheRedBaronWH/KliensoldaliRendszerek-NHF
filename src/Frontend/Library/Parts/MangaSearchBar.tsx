@@ -37,7 +37,7 @@ export function MangaSearchBar(
 }
 
 function searchifyTitle(title: string): string {
-    let string = title.trim().replace(" ", "-");
+    let string = title.trim().split(" ").join("-");
     if(isLibraryLogging()) console.log(`[Library] Searching for manga with title: ${title} => ${string}`);
     return string;
 }

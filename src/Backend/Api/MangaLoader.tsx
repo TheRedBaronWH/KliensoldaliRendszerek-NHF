@@ -1,8 +1,8 @@
 import { isApiLogging, isTryWithOrgAsWell } from "../..";
 import { CoverResponse, MangaResponse, MangaSearchResponse } from "../Model/Api/Manga";
-import { RawVolumesResponse, RawVolumesResponseToVolumesResponse, Volume, VolumeResponse } from "../Model/Api/Volume";
+import { RawVolumesResponse, RawVolumesResponseToVolumesResponse, Volume} from "../Model/Api/Volume";
 import { MangaModel, SavedManga } from "../Model/Model";
-import { toManga, toSavedManga, toSavedMangasList } from "../Model/Transformers";
+import { toManga, toSavedMangasList } from "../Model/Transformers";
 
 /** 
  * Looks for a manga's data from the MangaDex API based on the provided manga name.
@@ -33,13 +33,13 @@ export async function searchForMangasWithName(name: string): Promise<SavedManga[
 
 async function fetchByName(url: string, name: string): Promise<SavedManga[] | null> {
     try {
+        if (isApiLogging()) console.log(`[API] ${url + name}`);
+
         let response = await fetch(url + name);
         if (!response.ok) {
             console.error(`[API] Failed to fetch manga (${name}): ${response.statusText}`);
             return null;
         }
-
-        if (isApiLogging()) console.log(url + name);
 
         let data = await response.json() as MangaSearchResponse;
         return toSavedMangasList(data.data);
@@ -82,13 +82,13 @@ export async function loadManga(Id: string): Promise<MangaModel | null> {
 
 async function fetchById(url: string, Id: string): Promise<MangaModel | null> {
     try {
+        if (isApiLogging()) console.log(`[API] ${url + Id}`);
+
         let response = await fetch(url + Id);
         if (!response.ok) {
             console.error(`[API] Failed to fetch manga (${Id}): ${response.statusText}`);
             return null;
         }
-
-        if (isApiLogging()) console.log(url + Id);
 
         let data = await response.json() as MangaResponse;
         return toManga(data.data);
@@ -132,13 +132,13 @@ async function fetchContent(url: string, Id: string): Promise<Volume[] | null> {
     const aggregate = "/aggregate?translatedLanguage[]=en";
 
     try {
+        if (isApiLogging()) console.log(`[API] ${url + Id + aggregate}`); 
+
         let response = await fetch(url + Id + aggregate);
         if (!response.ok) {
             console.log(`[API] Failed to fetch manga content (${Id}): ${response.statusText}`);
             return null;
         }
-
-        if (isApiLogging()) console.log(url + Id + aggregate);
 
         let data = await response.json() as RawVolumesResponse;
         let fixedData = RawVolumesResponseToVolumesResponse(data);
@@ -182,13 +182,14 @@ async function fetchCover(url: string, mangaId: string, coverId: string): Promis
     const coverUrl = "https://uploads.mangadex.org/covers/";
 
     try {
+        if (isApiLogging()) console.log(`[API] ${url + coverId}`);
+
         let coverResponse = await fetch(url + coverId);
         if (!coverResponse.ok) {
             console.error(`[API] Failed to fetch manga cover (${mangaId}/${coverId}): ${coverResponse.statusText}`);
             return null;
         }
 
-        if (isApiLogging()) console.log(url + coverId);
 
         let coverData = await coverResponse.json() as CoverResponse;
         let fileName = coverData.data.attributes.fileName;

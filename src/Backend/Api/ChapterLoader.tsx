@@ -32,13 +32,13 @@ export async function loadChapter(Id: string): Promise<ChapterModel | null> {
 
 async function fetchChapter(url: string, Id: string): Promise<ChapterModel | null> {
     try {
+        if (isApiLogging()) console.log(`[API] ${url + Id}`);
+
         const response = await fetch(url + Id);
         if (!response.ok) {
             console.error(`[API] Failed to fetch chapter (${Id}): ${response.statusText}`);
             return null;
         }
-
-        if (isApiLogging()) console.log(url + Id);
 
         const data = await response.json() as ChapterResponse;
         return toChapter(data.data);
@@ -79,7 +79,7 @@ export async function loadPages(Id: string): Promise<ChapterPagesResponse | null
 
 async function fetchPages(url: string, Id: string): Promise<ChapterPagesResponse | null> {
     try {
-        if (isApiLogging()) console.log(url + Id);
+        if (isApiLogging()) console.log(`[API] ${url + Id}`);
 
         const response = await fetch(url + Id);
         if (!response.ok) {
