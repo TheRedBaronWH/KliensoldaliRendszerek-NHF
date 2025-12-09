@@ -29,7 +29,7 @@ export function MangaSearchBar(
                 let manga = await searchForMangasWithName(searchBy);
                 setMangaSearchResults(manga);
             }}
-            placeholder="Search for a manga by name"
+            placeholder="Search for manga to add (by name)"
             buttonIcon="search"
         />
         <MangaSearchResults searchResults={mangaSearchResults} addManga={addManga} setMessage={setMessage} setShowMessage={setShowMessage} />

@@ -25,7 +25,7 @@ export async function searchForMangasWithName(name: string): Promise<SavedManga[
         if (!isTryWithOrgAsWell()) {
             return null;
         }
-        console.log("Trying with .org endpoint");
+        console.log("[API] Trying with .org endpoint");
         let manga = await fetchByName(orgUrl, name);
         return manga;
     }
@@ -35,7 +35,7 @@ async function fetchByName(url: string, name: string): Promise<SavedManga[] | nu
     try {
         let response = await fetch(url + name);
         if (!response.ok) {
-            console.error(`Failed to fetch manga (${name}): ${response.statusText}`);
+            console.error(`[API] Failed to fetch manga (${name}): ${response.statusText}`);
             return null;
         }
 
@@ -45,7 +45,7 @@ async function fetchByName(url: string, name: string): Promise<SavedManga[] | nu
         return toSavedMangasList(data.data);
     }
     catch (error) {
-        console.error(`Error loading manga (${name}): ${error}`);
+        console.error(`[API] Error loading manga (${name}): ${error}`);
         return null;
     }
 }
@@ -74,7 +74,7 @@ export async function loadManga(Id: string): Promise<MangaModel | null> {
         if (!isTryWithOrgAsWell()) {
             return null;
         }
-        console.log("Trying with .org endpoint");
+        console.log("[API] Trying with .org endpoint");
         let manga = await fetchById(orgUrl, Id);
         return manga;
     }
@@ -84,7 +84,7 @@ async function fetchById(url: string, Id: string): Promise<MangaModel | null> {
     try {
         let response = await fetch(url + Id);
         if (!response.ok) {
-            console.error(`Failed to fetch manga (${Id}): ${response.statusText}`);
+            console.error(`[API] Failed to fetch manga (${Id}): ${response.statusText}`);
             return null;
         }
 
@@ -94,7 +94,7 @@ async function fetchById(url: string, Id: string): Promise<MangaModel | null> {
         return toManga(data.data);
     }
     catch (error) {
-        console.error(`Error loading manga (${Id}): ${error}`);
+        console.error(`[API] Error loading manga (${Id}): ${error}`);
         return null;
     }
 }
@@ -122,7 +122,7 @@ export async function loadMangaContent(Id: string): Promise<Volume[] | null> {
         if (!isTryWithOrgAsWell()) {
             return null;
         }
-        console.log("Trying with .org endpoint");
+        console.log("[API] Trying with .org endpoint");
         let content = await fetchContent(orgUrl, Id);
         return content;
     }
@@ -134,7 +134,7 @@ async function fetchContent(url: string, Id: string): Promise<Volume[] | null> {
     try {
         let response = await fetch(url + Id + aggregate);
         if (!response.ok) {
-            console.log(`Failed to fetch manga content (${Id}): ${response.statusText}`);
+            console.log(`[API] Failed to fetch manga content (${Id}): ${response.statusText}`);
             return null;
         }
 
@@ -145,7 +145,7 @@ async function fetchContent(url: string, Id: string): Promise<Volume[] | null> {
         return fixedData.volumes;
     }
     catch (error) {
-        console.error(`Error loading manga content (${Id}): ${error}`);
+        console.error(`[API] Error loading manga content (${Id}): ${error}`);
         return null;
     }
 }
@@ -172,7 +172,7 @@ export async function loadMangaCover(mangaId: string, coverId: string): Promise<
         if (!isTryWithOrgAsWell()) {
             return null;
         }
-        console.log("Trying with .org endpoint");
+        console.log("[API] Trying with .org endpoint");
         let cover = await fetchCover(orgUrl, mangaId, coverId);
         return cover;
     }
@@ -184,7 +184,7 @@ async function fetchCover(url: string, mangaId: string, coverId: string): Promis
     try {
         let coverResponse = await fetch(url + coverId);
         if (!coverResponse.ok) {
-            console.error(`Failed to fetch manga cover (${mangaId}/${coverId}): ${coverResponse.statusText}`);
+            console.error(`[API] Failed to fetch manga cover (${mangaId}/${coverId}): ${coverResponse.statusText}`);
             return null;
         }
 
@@ -196,7 +196,7 @@ async function fetchCover(url: string, mangaId: string, coverId: string): Promis
         return coverUrl + mangaId + "/" + fileName;
     }
     catch (error) {
-        console.error(`Error loading manga cover (${mangaId}/${coverId}): ${error}`);
+        console.error(`[API] Error loading manga cover (${mangaId}/${coverId}): ${error}`);
         return null;
     }
 }

@@ -26,7 +26,7 @@ export function Library() {
                 updateManga(manga);
                 setSelectedManga(manga);
                 if (!manga.volumes) {
-                    console.error("Volumes failed to load");
+                    console.error(`[Library] No volumes were loaded for manga: ${manga.title}`);
                     setMessage(`Failed to load volumes for: ${manga.title}`);
                     setShowMessage(true);
                     return;
@@ -39,7 +39,7 @@ export function Library() {
                 setShowMessage(true);
             }
         } catch (error) {
-            console.error("Failed to load manga:", error);
+            console.error(`[Library] Failed to load manga: ${error}`);
         }
     }
 

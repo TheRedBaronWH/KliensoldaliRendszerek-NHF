@@ -24,7 +24,7 @@ export async function loadChapter(Id: string): Promise<ChapterModel | null> {
         if (!isTryWithOrgAsWell()) {
             return null;
         }
-        console.log("Trying with .org endpoint");
+        console.log("[API] Trying with .org endpoint");
         let chapter = await fetchChapter(orgUrl, Id);
         return chapter;
     }
@@ -34,7 +34,7 @@ async function fetchChapter(url: string, Id: string): Promise<ChapterModel | nul
     try {
         const response = await fetch(url + Id);
         if (!response.ok) {
-            console.error(`Failed to fetch chapter (${Id}): ${response.statusText}`);
+            console.error(`[API] Failed to fetch chapter (${Id}): ${response.statusText}`);
             return null;
         }
 
@@ -45,7 +45,7 @@ async function fetchChapter(url: string, Id: string): Promise<ChapterModel | nul
 
     }
     catch (error) {
-        console.error(`Error loading chapter (${Id}): ${error}`);
+        console.error(`[API] Error loading chapter (${Id}): ${error}`);
         return null;
     }
 }
@@ -71,7 +71,7 @@ export async function loadPages(Id: string): Promise<ChapterPagesResponse | null
         if (!isTryWithOrgAsWell()) {
             return null;
         }
-        console.log("Trying with .org endpoint");
+        console.log("[API] Trying with .org endpoint");
         let pages = await fetchPages(orgUrl, Id);
         return pages;
     }
@@ -83,7 +83,7 @@ async function fetchPages(url: string, Id: string): Promise<ChapterPagesResponse
 
         const response = await fetch(url + Id);
         if (!response.ok) {
-            console.error(`Failed to fetch chapter pages (${Id}): ${response.statusText}`);
+            console.error(`[API] Failed to fetch chapter pages (${Id}): ${response.statusText}`);
             return null;
         }
 
@@ -91,7 +91,7 @@ async function fetchPages(url: string, Id: string): Promise<ChapterPagesResponse
         return chapter;
     }
     catch (error) {
-        console.error(`Error loading chapter pages (${Id}): ${error}`);
+        console.error(`[API] Error loading chapter pages (${Id}): ${error}`);
         return null;
     }
 }

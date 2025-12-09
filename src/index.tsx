@@ -15,7 +15,7 @@ export function isReaderLogging() {
 }
 
 //For you sanity, this as well
-const libraryLogging = true;
+const libraryLogging = false;
 export function isLibraryLogging() {
     return libraryLogging;
 }

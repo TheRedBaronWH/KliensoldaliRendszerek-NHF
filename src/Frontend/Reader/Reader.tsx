@@ -15,7 +15,7 @@ export function ChapterReader(
 
     let [actualVolume, setActualVolume] = useState(0);
     const setVolume = (v: number) => {
-        if (isReaderLogging()) console.log(`Trying to set volume from ${actualVolume} to ${v}; max ${selectedManga.volumes.length}`);
+        if (isReaderLogging()) console.log(`[Reader] Trying to set volume from ${actualVolume} to ${v}; max ${selectedManga.volumes.length}`);
         if (v < 0) return;
         if (v >= selectedManga.volumes.length) return;
 
@@ -31,7 +31,7 @@ export function ChapterReader(
     let [actualChapterNumber, setActualChapterNumber] = useState(0);
     let [actualChapter, setActualChapter] = useState<ChapterModel | null>(null);
     const setChapter = async (c: number) => {
-        if (isReaderLogging()) console.log(`Trying to set chapter from ${actualChapterNumber} to ${c}; max ${getVolume().chapterIds.length}`);
+        if (isReaderLogging()) console.log(`[Reader] Trying to set chapter from ${actualChapterNumber} to ${c}; max ${getVolume().chapterIds.length}`);
         if (c < 0) {
             setVolume(actualVolume - 1);
             return;
@@ -53,13 +53,13 @@ export function ChapterReader(
                 return chapter;
             }
         } catch (error) {
-            console.error("Failed to load chapter:", error);
+            console.error(`[Reader] Failed to load chapter: ${error}`);
         }
     }
 
     let [actualPageNumber, setActualPageNumber] = useState(0);
     const setPage = (p: number) => {
-        if (isReaderLogging()) console.log(`Trying to set page from ${actualPageNumber} to ${p}; max ${actualChapter?.pageIds.length}`);
+        if (isReaderLogging()) console.log(`[Reader] Trying to set page from ${actualPageNumber} to ${p}; max ${actualChapter?.pageIds.length}`);
         if (p < 0) {
             setChapter(actualChapterNumber - 1);
             return;
@@ -73,12 +73,12 @@ export function ChapterReader(
     }
     const getPageSource = () => {
         let src = actualChapter.baseUrl + "/data/" + actualChapter.hash + "/" + actualChapter.pageIds[actualPageNumber.valueOf()];
-        if (isReaderLogging()) console.log(`Page src: ${src}`);
+        if (isReaderLogging()) console.log(`[Reader] Page src: ${src}`);
         return src;
     }
     const getPageSourceDataSaver = () => {
         let src = actualChapter.baseUrl + "/data-saver/" + actualChapter.hash + "/" + actualChapter.dataSaverPageIds[actualPageNumber.valueOf()];
-        if (isReaderLogging()) console.log(`Page src: ${src}`);
+        if (isReaderLogging()) console.log(`[Reader] Page src: ${src}`);
         return src;
     }
 
