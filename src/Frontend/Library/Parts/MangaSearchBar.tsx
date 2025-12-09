@@ -6,6 +6,7 @@ import { searchForMangasWithName } from "../../../Backend/Api/MangaLoader";
 import { SavedManga } from "../../../Backend/Model/Model";
 import { IconButton } from "../../Common/IconButton";
 import { isLibraryLogging } from "../../..";
+import { MangaSearchResults } from "./MangaSearchResults";
 
 export type MangaSearchBarProps = {
     addManga: (manga: SavedManga) => boolean;
@@ -19,23 +20,6 @@ export function MangaSearchBar(
     let [newMangaTitle, setNewMangaTitle] = useState("");
     let [mangaSearchResults, setMangaSearchResults] = useState<SavedManga[] | null>(null);
 
-    let mangas = mangaSearchResults ? mangaSearchResults.map((manga) => {
-        return <IconButton
-            icon = "add"
-            content = {manga.mangaTitle}
-            contentPosition="left"
-            onClick = {() => {
-                if (addManga(manga)) {
-                    setMessage(`Added "${manga.mangaTitle}" to your library.`);
-                    setShowMessage(true);
-                } else {
-                    setMessage("Failed to add manga");
-                    setShowMessage(true);
-                }
-            }}
-        />
-    }) : null;
-
     return <div class="MangaSearchBar">
         <TextInputAndButton
             value={newMangaTitle}
@@ -48,7 +32,7 @@ export function MangaSearchBar(
             placeholder="Search for a manga by name"
             buttonIcon="search"
         />
-        {mangas}
+        <MangaSearchResults searchResults={mangaSearchResults} addManga={addManga} setMessage={setMessage} setShowMessage={setShowMessage} />
     </div>
 }
 
