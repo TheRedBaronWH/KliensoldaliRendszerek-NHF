@@ -107,9 +107,11 @@ export async function toChapter(data: Chapter): Promise<ChapterModel> {
  * Since the API returns information in a slightly inconvienient format (at least for our purposes),
  * we need to transform the raw data into our internal models.
  * 
- * @param data: Manga - Raw manga data from the API
+ * If data has multiple entries, only the first is used.!
  * 
- * @returns a SavedManga representing the transformed manga data, for storing
+ * @param data: Manga[] - Raw manga data from the API
+ * 
+ * @returns a SavedManga representing the transformed manga data, for storing. If data has multiple entries, only the first is used.
  **/
 export async function toSavedManga(data: Manga[]): Promise<SavedManga | null> {
     if(data.length === 0) return null;
@@ -118,12 +120,38 @@ export async function toSavedManga(data: Manga[]): Promise<SavedManga | null> {
     let title = data[0].attributes.title.en;
     let cover = await loadMangaCover(id, findRelationship(data[0], "cover_art")) || null;
 
-    console.log("toSavedManga:", id, title, cover);
-
     return new SavedManga(
         id,
         cover,
         title
     );
+}
+
+/** 
+ * Since the API returns information in a slightly inconvienient format (at least for our purposes),
+ * we need to transform the raw data into our internal models.
+ * 
+ * @param data: Manga[] - Raw manga data from the API
+ * 
+ * @returns a SavedManga[] representing the transformed manga data, for storing
+ **/
+export async function toSavedMangasList(data: Manga[]): Promise<SavedManga[] | null> {
+    if(data.length === 0) return null;
+
+    let mangas: SavedManga[] = [];
+
+    for(let d of data) {
+        let id = d.id;
+        let title = d.attributes.title.en;
+        let cover = await loadMangaCover(id, findRelationship(d, "cover_art")) || null;
+
+        mangas.push(new SavedManga(
+        id,
+        cover,
+        title
+        ));
+    }
+
+    return mangas;
 }
     

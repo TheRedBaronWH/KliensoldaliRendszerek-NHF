@@ -1,7 +1,7 @@
 import { render } from 'preact';
 
 import './index.css';
-import { Library } from './Frontend/Library';
+import { Library } from './Frontend/Library/Library';
 
 const apiLogging = true;
 export function isApiLogging() {
@@ -13,6 +13,13 @@ const readerLogging = false;
 export function isReaderLogging() {
     return readerLogging;
 }
+
+//For you sanity, this as well
+const libraryLogging = true;
+export function isLibraryLogging() {
+    return libraryLogging;
+}
+
 
 const dataSaver = true;
 export function isDataSaver() {

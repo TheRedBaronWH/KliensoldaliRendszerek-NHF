@@ -2,7 +2,7 @@ import { isApiLogging, isTryWithOrgAsWell } from "../..";
 import { CoverResponse, MangaResponse, MangaSearchResponse } from "../Model/Api/Manga";
 import { RawVolumesResponse, RawVolumesResponseToVolumesResponse, Volume, VolumeResponse } from "../Model/Api/Volume";
 import { MangaModel, SavedManga } from "../Model/Model";
-import { toManga, toSavedManga } from "../Model/Transformers";
+import { toManga, toSavedManga, toSavedMangasList } from "../Model/Transformers";
 
 /** 
  * Looks for a manga's data from the MangaDex API based on the provided manga name.
@@ -13,7 +13,7 @@ import { toManga, toSavedManga } from "../Model/Transformers";
  * 
  * @see {@link https://api.mangadex.dev/docs/redoc.html} for API documentation
  **/
-export async function searchForManga(name: string): Promise<SavedManga | null> {
+export async function searchForMangasWithName(name: string): Promise<SavedManga[] | null> {
     const url = "https://api.mangadex.dev/manga?title=";
     const orgUrl = "https://api.mangadex.org/manga?title=";
 
@@ -31,7 +31,7 @@ export async function searchForManga(name: string): Promise<SavedManga | null> {
     }
 }
 
-async function fetchByName(url: string, name: string): Promise<SavedManga | null> {
+async function fetchByName(url: string, name: string): Promise<SavedManga[] | null> {
     try {
         let response = await fetch(url + name);
         if (!response.ok) {
@@ -42,7 +42,7 @@ async function fetchByName(url: string, name: string): Promise<SavedManga | null
         if (isApiLogging()) console.log(url + name);
 
         let data = await response.json() as MangaSearchResponse;
-        return toSavedManga(data.data);
+        return toSavedMangasList(data.data);
     }
     catch (error) {
         console.error(`Error loading manga (${name}): ${error}`);
